@@ -3,7 +3,7 @@ from flask_jwt_extended import get_jwt, jwt_required
 
 from app.datasource_example import blocklist
 
-class Logout(Resource):
+class LogoutResource(Resource):
     @jwt_required()  # Requires a valid JWT token
     def post(self):
         jti = get_jwt()['jti']

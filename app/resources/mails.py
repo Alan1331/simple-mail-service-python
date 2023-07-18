@@ -5,7 +5,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.datasource_example import user_data
 from app.datasource_example import mail_data
 
-class Mails(Resource):
+class MailsResource(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('type', required=False, location='args')

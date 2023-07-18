@@ -1,12 +1,12 @@
 from flask_restful import Api
 
-from app.resources.registration import Registration
-from app.resources.login import Login
-from app.resources.logout import Logout
-from app.resources.mails import Mails
+from app.resources.registration import RegistrationResource
+from app.resources.login import LoginResource
+from app.resources.logout import LogoutResource
+from app.resources.mails import MailsResource
 
 def register_routes(api: Api):
-    api.add_resource(Registration, '/register')
-    api.add_resource(Login, '/login')
-    api.add_resource(Logout, '/logout')
-    api.add_resource(Mails, '/mail')
+    api.add_resource(RegistrationResource, '/register')
+    api.add_resource(LoginResource, '/login')
+    api.add_resource(LogoutResource, '/logout')
+    api.add_resource(MailsResource, '/mail')

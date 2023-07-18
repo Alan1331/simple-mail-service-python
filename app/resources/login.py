@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token
 
 from app.datasource_example import user_data
 
-class Login(Resource):
+class LoginResource(Resource):
     def post(self):
         mail_address = request.form['mail_address']
         input_password = request.form['password']
