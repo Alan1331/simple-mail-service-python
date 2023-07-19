@@ -1,28 +1,33 @@
-# app/models/mail_model.py
 from pymongo import MongoClient
 
-class Mails:
-    def __init__(self):
-        self.client = MongoClient('localhost', 27017)  # Update connection details if needed
-        self.db = self.client['mail_app_db']
-        self.collection = self.db['mails']
+from app import db
 
-    def create_mail(self, mail_data):
+class Mail:
+    def create_mail(mail):
         # Create a new mail document in the collection
-        self.collection.insert_one(mail_data)
+        result = db.mail.insert_one(mail)
+        return result
 
-    def get_all_mails(self):
+    def get_inbox_mails(user_mail_address):
+        # Retrieve received mail documents from the collection
+        return list(db.mail.find({"receiver": user_mail_address}))
+
+    def get_sent_mails(user_mail_address):
+        # Retrieve sent mail documents from the collection
+        return list(db.mail.find({"sender": user_mail_address}))
+
+    def get_all_mails():
         # Retrieve all mail documents from the collection
-        return list(self.collection.find())
+        return list(db.mail.find())
 
-    def get_mail_by_id(self, mail_id):
+    def get_mail_by_id(mail_id):
         # Retrieve a single mail document based on the provided ID
-        return self.collection.find_one({'_id': mail_id})
+        return db.mail.find_one({'_id': mail_id})
 
-    def update_mail(self, mail_id, updated_data):
+    def update_mail(mail_id, updated_data):
         # Update the mail document with the provided ID
-        self.collection.update_one({'_id': mail_id}, {'$set': updated_data})
+        db.mail.update_one({'_id': mail_id}, {'$set': updated_data})
 
-    def delete_mail(self, mail_id):
+    def delete_mail(mail_id):
         # Delete the mail document with the provided ID
-        self.collection.delete_one({'_id': mail_id})
+        db.mail.delete_one({'_id': mail_id})
