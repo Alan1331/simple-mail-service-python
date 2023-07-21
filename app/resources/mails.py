@@ -29,9 +29,6 @@ class MailsResource(Resource):
         elif mail_type == 'all':
             result = Mail.get_all_mails()
 
-        for mail in result:
-            mail['_id'] = str(mail['_id'])
-
         return {
             'result': result,
             'mail_type': mail_type
