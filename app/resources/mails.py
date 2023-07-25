@@ -55,10 +55,10 @@ class MailsResource(Resource):
             result = Mail.create_mail(mail=mail_data)
 
             # If the email was written successfully to the database
-            if result.acknowledged == True:
+            if result['acknowledged'] == True:
                 return {
                     'message': 'the mail was sent successfully',
-                    'sent_mail_id': result.inserted_id
+                    'sent_mail_id': result['inserted_id']
                 }, 201
             # If the email was not written successfully to the database
             else:

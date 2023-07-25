@@ -7,7 +7,15 @@ from app.utils.parser import parse_received_document
 class Mail:
     def create_mail(mail):
         # Create a new mail document in the collection
-        result = db.mail.insert_one(mail)
+        raw_result = db.mail.insert_one(mail)
+
+        # Convert result from InsertOneResult object to dictionary
+        # and convert the inserted_id to str
+        result = {
+            'acknowledged': raw_result.acknowledged,
+            'inserted_id': str(raw_result.inserted_id)
+        }
+
         return result
 
     def get_inbox_mails(user_mail_address):
