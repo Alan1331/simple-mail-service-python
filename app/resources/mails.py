@@ -30,6 +30,7 @@ class MailsResource(Resource):
             result = Mail.get_all_mails()
 
         return {
+            'message': 'requested mails were successfully received',
             'result': result,
             'mail_type': mail_type
         }, 200

@@ -15,6 +15,9 @@ class SingleMailResource(Resource):
         result = Mail.get_mail_by_id(mail_id)
 
         if result != None:
-            return {'result': result}, 200
+            return {
+                'message': 'requested mail was successfully received',
+                'result': result
+            }, 200
         else:
             return {'message': 'The mail is not found'}, 404
