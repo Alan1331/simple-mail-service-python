@@ -48,4 +48,4 @@ class Mail:
 
     def delete_mail(mail_id):
         # Delete the mail document with the provided ID
-        db.mail.delete_one({'_id': mail_id})
+        return db.mail.delete_one({'_id': ObjectId(mail_id)})
