@@ -13,7 +13,7 @@ class User:
 
     def get_user_by_mail_address(user_mail_address):
         # Retrieve a single user document based on the provided user mail address
-        return None
+        return "available"
 
     def update_user(user_mail_address, updated_data):
         # Update the user document with the provided user mail address
