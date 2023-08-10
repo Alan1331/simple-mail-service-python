@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-mongodb-deployment
+  labels:
+    app: mail-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mail-mongodb
+  template:
+    metadata:
+      labels:
+        app: mail-mongodb
+    spec:
+      containers:
+        - name: mail-mongodb
+          image: mongo
+          ports:
+            - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mail-mongodb-service
+spec:
+  selector:
+    app: mail-mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
