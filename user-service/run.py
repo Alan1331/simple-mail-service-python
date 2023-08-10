@@ -1,10 +1,4 @@
-import os
-from dotenv import load_dotenv
-
-# Load the .env file
-load_dotenv()
-
 from app import app
 
 if __name__ == '__main__':
-    app.run(host=(os.environ.get('USER_SERVICE_ADD')))
+    app.run(host='0.0.0.0')
