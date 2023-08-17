@@ -6,8 +6,8 @@ load_dotenv()
 # Initialize db connection and get the required database
 from pymongo import MongoClient
 
-db_conn = MongoClient(os.environ.get('DATABASE_URL'))
-db = db_conn['simple-mail']
+db_conn = MongoClient(os.environ.get('CORE_DB_URL'))
+db = db_conn['core-db']
 
 # Initialize flask app
 from flask import Flask
