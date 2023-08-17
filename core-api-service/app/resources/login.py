@@ -21,7 +21,7 @@ class LoginResource(Resource):
                     'access_token': access_token
                 }, 200
             else:
-                return {'message': 'wrong password'}, 401
+                return {'message': 'Wrong password'}, 401
         
         else:
-            return {'message': 'mail address unavailable'}, 401
+            return {'message': 'The mail address unavailable'}, 401

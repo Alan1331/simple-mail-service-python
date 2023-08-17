@@ -14,7 +14,7 @@ class SingleMailResource(Resource):
 
         if result != None:
             return {
-                'message': 'requested mail was successfully received',
+                'message': 'Requested mail was successfully received',
                 'result': result
             }, 200
         else:
@@ -25,18 +25,17 @@ class SingleMailResource(Resource):
     def delete(self, mail_id):
         result = Mail.delete_mail(mail_id)
 
-        if result.acknowledged:
-            if result.deleted_count == 1:
-                return {
-                    'message': 'The mail with given ID was deleted',
-                    'mail_id': mail_id
-                }, 200
-            else:
-                return {
-                    'message': 'The mail with given ID is not found',
-                    'mail_id': mail_id
-                }, 200
-        else:
+        if result == 'success':
+            return {
+                'message': 'The mail with given ID was deleted'
+            }, 200
+        
+        if result == 'not_found':
+            return {
+                'message': 'The mail with given ID is not found'
+            }, 404
+        
+        if result == 'db_error':
             return {
                 'message': 'The delete operation could not be performed due to database error'
             }, 500

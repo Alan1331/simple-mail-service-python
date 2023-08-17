@@ -1,34 +1,33 @@
-from pymongo import MongoClient
+# Load the .env file
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-from app import db
+url = 'http://' + os.environ.get('USER_SERVICE_ADD')
+
+import requests
 
 class User:
     def create_user(user):
-        # Create a new user document in the collection
-        result = db.user.insert_one(user)
-        return result
+        # Create a new user
+        endpoint = '/api/users'
+        response = requests.post(url + endpoint, json=user)
 
-    def get_all_user():
-        # Retrieve all user documents from the collection
-        return list(db.user.find())
-
-    def get_user_by_id(user_id):
-        # Retrieve a single user document based on the provided ID
-        return db.user.find_one({'_id': user_id})
+        if response.status_code == 201:
+            return 'success'
+        
+        if response.status_code == 500:
+            return 'db_error'
 
     def get_user_by_mail_address(user_mail_address):
-        # Retrieve a single user document based on the provided user mail address
-        return db.user.find_one({'mail_address': user_mail_address})
+        # Retrieve a single user based on the provided user mail address
+        endpoint = '/api/users/' + user_mail_address
+        response = requests.get(url + endpoint)
 
-    def update_user(user_mail_address, updated_data):
-        # Update the user document with the provided user mail address
-        result = db.user.update_one(
-            {'mail_address': user_mail_address},
-            {'$set': updated_data}
-        )
-        return result
-
-    def delete_user(user_mail_address):
-        # Delete the user document with the provided user mail address
-        result = db.user.delete_one({'mail_address': user_mail_address})
-        return result
+        if response.status_code == 404:
+            return None
+        
+        if response.status_code == 200:
+            response_dict = response.json()
+            result = response_dict['result']
+            return result

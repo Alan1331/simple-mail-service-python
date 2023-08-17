@@ -1,51 +1,67 @@
-from bson import ObjectId
+# Load the .env file
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-from app import db
-from app.utils.parser import parse_received_collection
-from app.utils.parser import parse_received_document
+url = 'http://' + os.environ.get('MAIL_SERVICE_ADD')
+
+import requests
 
 class Mail:
     def create_mail(mail):
         # Create a new mail document in the collection
-        raw_result = db.mail.insert_one(mail)
+        endpoint = '/api/mails'
+        response = requests.post(url + endpoint, json=mail)
 
-        # Convert result from InsertOneResult object to dictionary
-        # and convert the inserted_id to str
-        result = {
-            'acknowledged': raw_result.acknowledged,
-            'inserted_id': str(raw_result.inserted_id)
+        if response.status_code == 201:
+            return 'success'
+        
+        if response.status_code == 500:
+            return 'db_error'
+
+    def get_all_mails(mail_address, type):
+        # Retrieve all mail related to given mail_address from the mail api
+        endpoint = '/api/mails'
+        querystring = {
+            'mail-address': mail_address
         }
 
-        return result
+        if type != 'all':
+            querystring['type'] = type
 
-    def get_inbox_mails(user_mail_address):
-        # Retrieve received mail documents from the collection
-        result = db.mail.find({"receiver": user_mail_address})
-        return parse_received_collection(result)
+        response = requests.get(url + endpoint, params=querystring)
 
-    def get_sent_mails(user_mail_address):
-        # Retrieve sent mail documents from the collection
-        result = db.mail.find({"sender": user_mail_address})
-        return parse_received_collection(result)
-
-    def get_all_mails():
-        # Retrieve all mail documents from the collection
-        result = db.mail.find()
-        return parse_received_collection(result)
+        if response.status_code == 200:
+            response_dict = response.json()
+            result = response_dict['result']
+            return result
+        
+        if response.status_code == 400:
+            return 'invalid_params'
 
     def get_mail_by_id(mail_id):
-        # Retrieve a single mail document based on the provided ID
-        result = db.mail.find_one({'_id': ObjectId(mail_id)})
+        # Retrieve a single mail based on the given ID
+        endpoint = '/api/mails/' + mail_id
+        response = requests.get(url + endpoint)
 
-        if result != None:
-            return parse_received_document(result)
-        else:
+        if response.status_code == 200:
+            response_dict = response.json()
+            result = response_dict['result']
             return result
-
-    def update_mail(mail_id, updated_data):
-        # Update the mail document with the provided ID
-        db.mail.update_one({'_id': mail_id}, {'$set': updated_data})
+        
+        if response.status_code == 404:
+            return None
 
     def delete_mail(mail_id):
-        # Delete the mail document with the provided ID
-        return db.mail.delete_one({'_id': ObjectId(mail_id)})
+        # Delete the mail based on given ID
+        endpoint = '/api/mails/' + mail_id
+        response = requests.delete(url + endpoint)
+
+        if response.status_code == 200:
+            return 'success'
+        
+        if response.status_code == 404:
+            return 'not_found'
+        
+        if response.status_code == 500:
+            return 'db_error'

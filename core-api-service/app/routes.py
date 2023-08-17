@@ -7,8 +7,8 @@ from app.resources.mails import MailsResource
 from app.resources.mail import SingleMailResource
 
 def register_routes(api: Api):
-    api.add_resource(RegistrationResource, '/register')
-    api.add_resource(LoginResource, '/login')
-    api.add_resource(LogoutResource, '/logout')
-    api.add_resource(MailsResource, '/mail')
-    api.add_resource(SingleMailResource, '/mail/<string:mail_id>')
+    api.add_resource(RegistrationResource, '/api/register')
+    api.add_resource(LoginResource, '/api/login')
+    api.add_resource(LogoutResource, '/api/logout')
+    api.add_resource(MailsResource, '/api/mails')
+    api.add_resource(SingleMailResource, '/api/mails/<string:mail_id>')

@@ -20,19 +20,16 @@ class MailsResource(Resource):
         if args['type'] != None:
             mail_type = args['type']
 
-        if mail_type == 'inbox':
-            result = Mail.get_inbox_mails(user_mail_address)
+        result = Mail.get_all_mails(user_mail_address, mail_type)
 
-        elif mail_type == 'sent':
-            result = Mail.get_sent_mails(user_mail_address)
-
-        elif mail_type == 'all':
-            result = Mail.get_all_mails()
-
+        if result == 'invalid_params':
+            return {
+                'message': 'Parameter code error on server'
+            }, 500
+        
         return {
-            'message': 'requested mails were successfully received',
-            'result': result,
-            'mail_type': mail_type
+            'message': 'Requested mails were successfully received',
+            'result': result
         }, 200
     
     @jwt_required()
@@ -56,19 +53,18 @@ class MailsResource(Resource):
             result = Mail.create_mail(mail=mail_data)
 
             # If the email was written successfully to the database
-            if result['acknowledged'] == True:
+            if result == 'success':
                 return {
-                    'message': 'the mail was sent successfully',
-                    'sent_mail_id': result['inserted_id']
+                    'message': 'The mail was sent successfully'
                 }, 201
+            
             # If the email was not written successfully to the database
-            else:
+            if result == 'db_error':
                 return {
-                    'message': 'the mail could not be sent to the database due to database error'
+                    'message': 'The mail could not be sent to the database due to database error'
                 }, 500
         
         else:
             return {
-                'message': 'the receiver mail address is not found',
-                'receiver_mail_address': receiver
+                'message': 'The receiver mail address is not found'
             }, 400
