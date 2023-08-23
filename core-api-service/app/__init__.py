@@ -9,6 +9,15 @@ from pymongo import MongoClient
 db_conn = MongoClient(os.environ.get('CORE_DB_URL'))
 db = db_conn['core-db']
 
+# Initialize redis connection
+import redis
+
+redis_client = redis.Redis(
+    host=os.environ.get('REDIS_HOST'),
+    port=os.environ.get('REDIS_PORT'),
+    db=os.environ.get('REDIS_DB')
+)
+
 # Initialize flask app
 from flask import Flask
 app = Flask(__name__)
