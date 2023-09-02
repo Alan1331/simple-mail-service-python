@@ -1,22 +1,16 @@
 # simple-mail-service-python
-Simple mail backend service built using Python with Flask libraries: Flask-RESTfull, flask-jwt-extended, and so on.
-
+Simple mail backend services built using Python with Flask libraries: Flask-RESTfull, flask-jwt-extended, and so on.
 ## Deployment
 
-To deploy this project on local server, run the following command to install all dependencies:
-
+You need a kubernetes cluster to deploy this project. Here is the following steps for deployment:
+- Prepare a kubernetes cluster.
+- Get into the cluster control plane to run kubectl commands.
+- Clone this project repository and change your current working directory into the root of this project.
+- Run the following commands to apply all deployment files:
 ```bash
-pip install -r requirements.txt
+kubectl apply -f k8s/*.yaml
 ```
-
-Create '.env' file by copying '.env.example' file on project root directory:
-
+- If the preceding command didn't work, try to apply each deployment file in /k8s directory one-by-one. For example:
 ```bash
-cp .env.example .env
-```
-
-Modify the '.env' file content to match your environment settings. After that, execute 'run.py' to run the mail service:
-
-```bash
-python3 run.py
+kubectl apply -f k8s/core-api.yaml
 ```
